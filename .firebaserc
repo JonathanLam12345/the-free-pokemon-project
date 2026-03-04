@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "jlstudios-custom-cards"
+  },
+  "targets": {
+    "jlstudios-custom-cards": {
+      "hosting": {
+        "pokemon": [
+          "the-free-pokemon-project"
+        ]
+      }
+    }
+  }
+}
