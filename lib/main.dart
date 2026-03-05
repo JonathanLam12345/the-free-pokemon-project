@@ -59,7 +59,7 @@ class _LandingPageState extends State<LandingPage> {
   final GlobalKey _faqKey = GlobalKey();
 
   final String githubBase =
-      "https://raw.githubusercontent.com/JonathanLam12345/JLStudios.Custom.Pokemon.Cards/refs/heads/main/assets/";
+      "https://raw.githubusercontent.com/JonathanLam12345/the-free-pokemon-project/refs/heads/main/assets/";
 
   @override
   void didChangeDependencies() {
@@ -172,7 +172,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget _buildGlobalStarField() {
     return IgnorePointer(
       child: Stack(
-        children: List.generate(150, (index) {
+        children: List.generate(95, (index) {
           final double top = (index * 177.7) % 4000;
           final double left = (index * 211.3) % 1800;
           final double opacity = 0.15 + (index % 5) * 0.05;
@@ -273,59 +273,63 @@ class _LandingPageState extends State<LandingPage> {
               ],
             ),
           ),
-          // Stealth Card Graphic
+
+
+// The Parent Container provides the solid background to hide the stars
           Container(
-            width: 220, // Adjusted for card aspect ratio
-            height: 310,
+            padding: const EdgeInsets.all(20), // Optional: adds a small "safe zone" around the card
             decoration: BoxDecoration(
-              // Changed shape from circle to rectangle for the card look
-              color: const Color(0xFF1E2A4A),
-              // Solid indigo base [cite: 39]
-              borderRadius: BorderRadius.circular(16),
-              // Rounded corners like a real card
-              border: Border.all(
-                color: const Color(0xFFFFCB05),
-                // Classic Pokemon Yellow border [cite: 35]
-                width: 4,
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: const Color(0xFFFFCB05).withOpacity(0.3),
-                  blurRadius: 20,
-                  spreadRadius: 2,
+              color: const Color(0xFF101B3B), // Your requested background color
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Container(
+              width: 220,
+              height: 310,
+              decoration: BoxDecoration(
+                color: const Color(0xFF1E2A4A), // The card's internal color
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: const Color(0xFFFFCB05),
+                  width: 4,
                 ),
-              ],
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  const Color(0xFFFFCB05).withOpacity(0.1),
-                  Colors.transparent,
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFFFFCB05).withOpacity(0.3),
+                    blurRadius: 20,
+                    spreadRadius: 2,
+                  ),
+                ],
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    const Color(0xFFFFCB05).withOpacity(0.1),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Internal glow/pattern
+                  Container(
+                    margin: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.white.withOpacity(0.03),
+                    ),
+                  ),
+                  // The Pokémon Icon
+                  Transform.flip(
+                    flipY: true,
+                    child: const Icon(
+                      Icons.catching_pokemon,
+                      size: 120,
+                      color: Colors.white10,
+                    ),
+                  ),
                 ],
               ),
-            ),
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                // Subtle background pattern or glow
-                Container(
-                  margin: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                    color: Colors.white.withOpacity(0.03),
-                  ),
-                ),
-                // The Pokémon Icon
-                Transform.flip(
-                  flipY: true,
-                  // Applied flip as requested in your latest snippet
-                  child: const Icon(
-                    Icons.catching_pokemon,
-                    size: 120,
-                    color: Colors.white10,
-                  ),
-                ),
-              ],
             ),
           ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.1),
         ],
@@ -398,7 +402,7 @@ class _LandingPageState extends State<LandingPage> {
             runSpacing: 30,
             alignment: WrapAlignment.center,
             children: [
-              _infoCard("Date", "Sunday\nMay 24, 2026", Icons.calendar_month),
+              _infoCard("Date", "Sunday, May 24, 2026", Icons.calendar_month),
               _infoCard("Time", "8:30 AM – 11:00 AM", Icons.alarm),
               _infoCard(
                 "Location",
