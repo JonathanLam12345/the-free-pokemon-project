@@ -475,9 +475,8 @@ class _LandingPageState extends State<LandingPage> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            onPressed: () => null,
-            child: const Text(
-              "Coming Soon",
+            onPressed: () => _launchURL("https://docs.google.com/forms/d/e/1FAIpQLSe62I_R8h1crE2auiA62R3PVzFc1RJ8iPWVdvTcMsRxd7jphg/viewform?fbclid=IwY2xjawQW4WJleHRuA2FlbQIxMABicmlkETFid2RCU2tyMzFNZjVnRkptc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoMheblqS3bhmokeuwOR5wqfWD3A3tOSClcEMoC1tE4Sie6mHDTSdqeCexdT_aem_YcSR9ZlKoKIPIyumQfblvQ"), child: const Text(
+              "Register Now",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -541,7 +540,7 @@ class _LandingPageState extends State<LandingPage> {
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 800),
             child: Text(
-              "Photographs and videos may be taken during the event and used on social media...",
+              "Photographs and videos may be taken during the event and could be used on our social media pages or promotional materials. If you do not feel comfortable having your image or your child’s image taken, please let one of our staff members know.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
@@ -566,13 +565,14 @@ class _LandingPageState extends State<LandingPage> {
             subtitle: "Our Community Partners",
           ),
           const SizedBox(height: 50),
+          // Inside _buildSponsorsSection
           Wrap(
             spacing: 60,
             runSpacing: 40,
             alignment: WrapAlignment.center,
             children: [
-              _sponsorLogo("Flaring Lair", "https://FlaringLair.com"),
-              _sponsorLogo("JLStudios", ""),
+              _sponsorLogo("Flaring Lair", "https://FlaringLair.com", "flaring_lair_logo.webp"),
+              _sponsorLogo("JLStudios", "", "jlstudios_logo.webp"),
             ],
           ),
         ],
@@ -814,15 +814,31 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget _sponsorLogo(String name, String url) {
+  Widget _sponsorLogo(String name, String url, String imageName) {
     return InkWell(
       onTap: url.isNotEmpty ? () => _launchURL(url) : null,
       child: Column(
         children: [
-          const Icon(
-            Icons.verified_user_outlined,
-            size: 50,
-            color: Colors.white24,
+          // Replaced the Icon with a network image from your GitHub assets
+          Image.network(
+            '$githubBase$imageName',
+            height: 50,
+            fit: BoxFit.contain,
+
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return const SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              );
+            },
+            // Optional: Falls back to a simple icon if the image fails to load
+            errorBuilder: (context, error, stackTrace) => const Icon(
+              Icons.business,
+              size: 50,
+              color: Colors.white24,
+            ),
           ),
           const SizedBox(height: 15),
           Text(
