@@ -57,7 +57,6 @@ class _LandingPageState extends State<LandingPage> {
   final GlobalKey _registrationKey = GlobalKey();
   final GlobalKey _galleryKey = GlobalKey();
   final GlobalKey _faqKey = GlobalKey();
-
   final String githubBase =
       "https://raw.githubusercontent.com/JonathanLam12345/the-free-pokemon-project/refs/heads/main/assets/";
 
@@ -66,6 +65,17 @@ class _LandingPageState extends State<LandingPage> {
     super.didChangeDependencies();
     // Pre-caching the logo for a smooth load
     precacheImage(NetworkImage('${githubBase}logo.webp'), context);
+
+    precacheImage(NetworkImage('${githubBase}image1.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image2.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image3.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image4.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image5.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image6.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image7.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image8.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image9.webp'), context);
+    precacheImage(NetworkImage('${githubBase}image10.webp'), context);
   }
 
   void _scrollTo(GlobalKey key) {
@@ -138,16 +148,16 @@ class _LandingPageState extends State<LandingPage> {
                     title: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                      InkWell(
-                      mouseCursor: SystemMouseCursors.click,
-                      onTap: () => html.window.location.reload(),
-                      child: Image.network(
-                        '${githubBase}logo.webp',
-                        height: 35,
-                        fit: BoxFit.contain,
-                        // The errorBuilder has been removed
-                      ),
-                    ),
+                        InkWell(
+                          mouseCursor: SystemMouseCursors.click,
+                          onTap: () => html.window.location.reload(),
+                          child: Image.network(
+                            '${githubBase}logo.webp',
+                            height: 35,
+                            fit: BoxFit.contain,
+                            // The errorBuilder has been removed
+                          ),
+                        ),
                         const SizedBox(width: 12),
                         const Text(
                           'The Free Pokémon Project',
@@ -274,8 +284,7 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ),
 
-
-// The Parent Container provides the solid background to hide the stars
+          // The Parent Container provides the solid background to hide the stars
           Container(
             padding: const EdgeInsets.all(20), // Optional: adds a small "safe zone" around the card
             decoration: BoxDecoration(
@@ -366,20 +375,15 @@ class _LandingPageState extends State<LandingPage> {
                 ),
               ),
               Container(
-                width: 400,
-                height: 250,
+                width: 320,
+                height: 300,
+                clipBehavior: Clip.antiAlias, // Ensures the slideshow images respect the rounded corners
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E2A4A),
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: Colors.white10),
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.groups_outlined,
-                    size: 80,
-                    color: Color(0xFFFFCB05),
-                  ),
-                ),
+                child: const CardSlideshow(), // The newly added slideshow widget
               ).animate().fadeIn(delay: 400.ms),
             ],
           ),
@@ -475,7 +479,8 @@ class _LandingPageState extends State<LandingPage> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            onPressed: () => _launchURL("https://docs.google.com/forms/d/e/1FAIpQLSe62I_R8h1crE2auiA62R3PVzFc1RJ8iPWVdvTcMsRxd7jphg/viewform?fbclid=IwY2xjawQW4WJleHRuA2FlbQIxMABicmlkETFid2RCU2tyMzFNZjVnRkptc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoMheblqS3bhmokeuwOR5wqfWD3A3tOSClcEMoC1tE4Sie6mHDTSdqeCexdT_aem_YcSR9ZlKoKIPIyumQfblvQ"), child: const Text(
+            onPressed: () => _launchURL("https://docs.google.com/forms/d/e/1FAIpQLSe62I_R8h1crE2auiA62R3PVzFc1RJ8iPWVdvTcMsRxd7jphg/viewform?fbclid=IwY2xjawQW4WJleHRuA2FlbQIxMABicmlkETFid2RCU2tyMzFNZjVnRkptc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoMheblqS3bhmokeuwOR5wqfWD3A3tOSClcEMoC1tE4Sie6mHDTSdqeCexdT_aem_YcSR9ZlKoKIPIyumQfblvQ"),
+            child: const Text(
               "Register Now",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
@@ -537,10 +542,10 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ).animate().fadeIn(),
           const SizedBox(height: 30),
-          ConstrainedBox(
+           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 800),
             child: Text(
-              "Photographs and videos may be taken during the event and could be used on our social media pages or promotional materials. If you do not feel comfortable having your image or your child’s image taken, please let one of our staff members know.",
+              "Photographs and videos may be taken during the event and could be used on our social media pages or promotional materials.\nIf you do not feel comfortable having your image or your child’s image taken, please let one of our staff members know.",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
@@ -565,7 +570,6 @@ class _LandingPageState extends State<LandingPage> {
             subtitle: "Our Community Partners",
           ),
           const SizedBox(height: 50),
-          // Inside _buildSponsorsSection
           Wrap(
             spacing: 60,
             runSpacing: 40,
@@ -637,7 +641,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 const TextSpan(
                   text:
-                      ".\nDuring the event, please reach out to Daniel or Frances.",
+                  ".\nDuring the event, please reach out to Daniel or Frances.",
                 ),
               ],
             ),
@@ -704,12 +708,12 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget _infoCard(
-    String title,
-    String content,
-    IconData icon, {
-    String? link,
-    String? actionText,
-  }) {
+      String title,
+      String content,
+      IconData icon, {
+        String? link,
+        String? actionText,
+      }) {
     return InkWell(
       onTap: link != null ? () => _launchURL(link) : null,
       borderRadius: BorderRadius.circular(24),
@@ -824,7 +828,6 @@ class _LandingPageState extends State<LandingPage> {
             '$githubBase$imageName',
             height: 80,
             fit: BoxFit.contain,
-
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) return child;
               return const SizedBox(
@@ -889,6 +892,125 @@ class SectionHeader extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Container(width: 80, height: 3, color: const Color(0xFFFFCB05)),
+      ],
+    );
+  }
+}
+
+class CardSlideshow extends StatefulWidget {
+  const CardSlideshow({super.key});
+
+  @override
+  State<CardSlideshow> createState() => _CardSlideshowState();
+}
+
+class _CardSlideshowState extends State<CardSlideshow> {
+  final PageController _pageController = PageController();
+  Timer? _timer;
+  String githubBase =
+      "https://raw.githubusercontent.com/JonathanLam12345/the-free-pokemon-project/refs/heads/main/assets/";
+
+  late final List<String> cardImages = [
+    '${githubBase}image1.webp',
+    '${githubBase}image2.webp',
+    '${githubBase}image3.webp',
+    '${githubBase}image4.webp',
+    '${githubBase}image5.webp',
+    '${githubBase}image6.webp',
+    '${githubBase}image7.webp',
+    '${githubBase}image8.webp',
+    '${githubBase}image9.webp',
+    '${githubBase}image10.webp',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer?.cancel();
+    _timer = Timer.periodic(const Duration(seconds: 6), (timer) {
+      if (_pageController.hasClients) {
+        int nextPage = (_pageController.page!.toInt() + 1) % cardImages.length;
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 900),
+          curve: Curves.easeOutCubic,
+        );
+      }
+    });
+  }
+
+  void _moveNext() {
+    if (_pageController.hasClients) {
+      int nextPage = (_pageController.page!.toInt() + 1) % cardImages.length;
+      _pageController.animateToPage(
+        nextPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
+      _startTimer();
+    }
+  }
+
+  void _movePrevious() {
+    if (_pageController.hasClients) {
+      int prevPage =
+          (_pageController.page!.toInt() - 1 + cardImages.length) %
+              cardImages.length;
+
+      _pageController.animateToPage(
+        prevPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeOut,
+      );
+      _startTimer();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        PageView.builder(
+          controller: _pageController,
+          itemCount: cardImages.length,
+          itemBuilder: (context, index) {
+            return Image.network(
+              cardImages[index],
+              fit: BoxFit.cover, // Ensures images cover the entire container elegantly
+              errorBuilder: (context, error, stackTrace) => const Center(
+                child: Icon(Icons.broken_image, color: Colors.white24, size: 50),
+              ),
+            );
+          },
+        ),
+        // Previous Button Overlay
+        Positioned(
+          left: 10,
+          child: IconButton(
+            icon: const Icon(Icons.arrow_back_ios, color: Colors.white70),
+            onPressed: _movePrevious,
+          ),
+        ),
+        // Next Button Overlay
+        Positioned(
+          right: 10,
+          child: IconButton(
+            icon: const Icon(Icons.arrow_forward_ios, color: Colors.white70),
+            onPressed: _moveNext,
+          ),
+        ),
       ],
     );
   }
