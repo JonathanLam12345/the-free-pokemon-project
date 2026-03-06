@@ -283,14 +283,14 @@ class _LandingPageState extends State<LandingPage> {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Container(
-              width: 220,
-              height: 310,
+              width: 210,
+              height: 300,
               decoration: BoxDecoration(
                 color: const Color(0xFF1E2A4A), // The card's internal color
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(
                   color: const Color(0xFFFFCB05),
-                  width: 4,
+                  width: 3,
                 ),
                 boxShadow: [
                   BoxShadow(
