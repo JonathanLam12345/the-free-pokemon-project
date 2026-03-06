@@ -692,7 +692,7 @@ class _LandingPageState extends State<LandingPage> {
           ),
           const SizedBox(height: 10),
           TextButton(
-            onPressed: () => null,
+            onPressed: () => _launchURL("mailto:JLStudios416@gmail.com"),
             child: const Text(
               "Website designed by JLStudios",
               style: TextStyle(color: Color(0xFFFFCB05)),
@@ -822,7 +822,7 @@ class _LandingPageState extends State<LandingPage> {
           // Replaced the Icon with a network image from your GitHub assets
           Image.network(
             '$githubBase$imageName',
-            height: 50,
+            height: 80,
             fit: BoxFit.contain,
 
             loadingBuilder: (context, child, loadingProgress) {
