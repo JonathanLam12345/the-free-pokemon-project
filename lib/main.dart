@@ -153,7 +153,7 @@ class _LandingPageState extends State<LandingPage> {
                           onTap: () => html.window.location.reload(),
                           child: Image.network(
                             '${githubBase}logo.webp',
-                            height: 35,
+                            height: 20,
                             fit: BoxFit.contain,
                             // The errorBuilder has been removed
                           ),
@@ -229,7 +229,8 @@ class _LandingPageState extends State<LandingPage> {
       child: Wrap(
         alignment: WrapAlignment.center,
         crossAxisAlignment: WrapCrossAlignment.center,
-        spacing: 60,
+        spacing: 20,
+        runSpacing: 60,
         children: [
           ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 500),
@@ -284,63 +285,83 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ),
 
-          // The Parent Container provides the solid background to hide the stars
-          Container(
-            padding: const EdgeInsets.all(20), // Optional: adds a small "safe zone" around the card
-            decoration: BoxDecoration(
-              color: const Color(0xFF101B3B), // Your requested background color
-              borderRadius: BorderRadius.circular(20),
-            ),
-            child: Container(
-              width: 210,
-              height: 300,
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E2A4A), // The card's internal color
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: const Color(0xFFFFCB05),
-                  width: 3,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0xFFFFCB05).withOpacity(0.3),
-                    blurRadius: 20,
-                    spreadRadius: 2,
-                  ),
-                ],
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: [
-                    const Color(0xFFFFCB05).withOpacity(0.1),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // Internal glow/pattern
-                  Container(
-                    margin: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      color: Colors.white.withOpacity(0.03),
-                    ),
-                  ),
-                  // The Pokémon Icon
-                  Transform.flip(
-                    flipY: true,
-                    child: const Icon(
-                      Icons.catching_pokemon,
-                      size: 120,
-                      color: Colors.white10,
-                    ),
-                  ),
-                ],
-              ),
+          Image.network(
+            '${githubBase}logo.webp',
+            height: 160,
+            fit: BoxFit.contain,
+            loadingBuilder: (context, child, loadingProgress) {
+              if (loadingProgress == null) return child;
+              return const SizedBox(
+                height: 50,
+                width: 50,
+                child: CircularProgressIndicator(strokeWidth: 2),
+              );
+            },
+            // Falls back to a simple icon if the image fails to load
+            errorBuilder: (context, error, stackTrace) => const Icon(
+              Icons.broken_image, // Fixed invalid 'Icons.logo' icon
+              size: 50,
+              color: Colors.white24,
             ),
           ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.1),
+
+          // // The Parent Container provides the solid background to hide the stars
+          // Container(
+          //   padding: const EdgeInsets.all(20), // Optional: adds a small "safe zone" around the card
+          //   decoration: BoxDecoration(
+          //     color: const Color(0xFF101B3B), // Your requested background color
+          //     borderRadius: BorderRadius.circular(20),
+          //   ),
+          //   child: Container(
+          //     width: 210,
+          //     height: 300,
+          //     decoration: BoxDecoration(
+          //       color: const Color(0xFF1E2A4A), // The card's internal color
+          //       borderRadius: BorderRadius.circular(16),
+          //       border: Border.all(
+          //         color: const Color(0xFFFFCB05).withOpacity(0.9),
+          //         width: 3,
+          //       ),
+          //       boxShadow: [
+          //         BoxShadow(
+          //           color: const Color(0xFFFFCB05).withOpacity(0.3),
+          //           blurRadius: 20,
+          //           spreadRadius: 2,
+          //         ),
+          //       ],
+          //       gradient: LinearGradient(
+          //         begin: Alignment.topLeft,
+          //         end: Alignment.bottomRight,
+          //         colors: [
+          //           const Color(0xFFFFCB05).withOpacity(0.1),
+          //           Colors.transparent,
+          //         ],
+          //       ),
+          //     ),
+          //     child: Stack(
+          //       alignment: Alignment.center,
+          //       children: [
+          //         // Internal glow/pattern
+          //         Container(
+          //           margin: const EdgeInsets.all(12),
+          //           decoration: BoxDecoration(
+          //             borderRadius: BorderRadius.circular(8),
+          //             color: Colors.white.withOpacity(0.03),
+          //           ),
+          //         ),
+          //         // The Pokémon Icon
+          //         Transform.flip(
+          //           flipY: true,
+          //           child: const Icon(
+          //             Icons.catching_pokemon,
+          //             size: 120,
+          //             color: Colors.white10,
+          //           ),
+          //         ),
+          //       ],
+          //     ),
+          //   ),
+          // ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.1),
         ],
       ),
     );
@@ -366,7 +387,7 @@ class _LandingPageState extends State<LandingPage> {
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 450),
                 child: const Text(
-                  "The Free Pokémon Project is back! We welcome young trainers to a magical world where Pokémon dreams come true...\n\nThis free community event is all about bringing smiles to kids through games, raffles, and Pokémon cards.",
+                  "The Free Pokémon Project is back! We welcome young trainers to a magical world where Pokémon dreams come true...\n\nThis free community event is all about bringing smiles to kids through games, raffles, and Pokémon cards.\n\n",
                   style: TextStyle(
                     fontSize: 18,
                     height: 1.8,
@@ -374,16 +395,19 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                 ),
               ),
+              //  SizedBox(height: 50, width: 50,),
               Container(
-                width: 320,
-                height: 300,
-                clipBehavior: Clip.antiAlias, // Ensures the slideshow images respect the rounded corners
+                width: 460,
+                height: 320,
+                clipBehavior: Clip.antiAlias,
+                // Ensures the slideshow images respect the rounded corners
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E2A4A),
                   borderRadius: BorderRadius.circular(24),
                   border: Border.all(color: Colors.white10),
                 ),
-                child: const CardSlideshow(), // The newly added slideshow widget
+                child:
+                    const CardSlideshow(), // The newly added slideshow widget
               ).animate().fadeIn(delay: 400.ms),
             ],
           ),
@@ -444,6 +468,38 @@ class _LandingPageState extends State<LandingPage> {
                   _featurePoint("Games and activities"),
                   _featurePoint("Raffles and prizes"),
                   _featurePoint("Pokémon cards, \nincluding Holo cards!"),
+
+                  SizedBox(height: 15),
+                  Container(
+                    constraints: isMobile
+                        ? const BoxConstraints(maxWidth: 270)
+                        : const BoxConstraints(maxWidth: 400),
+                    padding: const EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFCB05).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: const Color(0xFFFFCB05).withOpacity(0.3),
+                      ),
+                    ),
+                    child: const Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(Icons.lightbulb_outline, color: Color(0xFFFFCB05)),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: Text(
+                            "Trainer Tip: We won't be handing out Pokémon card binders or tins, so be sure to bring your own bag or binder to safely store your new cards!",
+                            style: TextStyle(
+                              color: Colors.white70,
+                              fontSize: 15,
+                              height: 1.5,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -479,7 +535,9 @@ class _LandingPageState extends State<LandingPage> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            onPressed: () => _launchURL("https://docs.google.com/forms/d/e/1FAIpQLSe62I_R8h1crE2auiA62R3PVzFc1RJ8iPWVdvTcMsRxd7jphg/viewform?fbclid=IwY2xjawQW4WJleHRuA2FlbQIxMABicmlkETFid2RCU2tyMzFNZjVnRkptc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoMheblqS3bhmokeuwOR5wqfWD3A3tOSClcEMoC1tE4Sie6mHDTSdqeCexdT_aem_YcSR9ZlKoKIPIyumQfblvQ"),
+            onPressed: () => _launchURL(
+              "https://docs.google.com/forms/d/e/1FAIpQLSe62I_R8h1crE2auiA62R3PVzFc1RJ8iPWVdvTcMsRxd7jphg/viewform?fbclid=IwY2xjawQW4WJleHRuA2FlbQIxMABicmlkETFid2RCU2tyMzFNZjVnRkptc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoMheblqS3bhmokeuwOR5wqfWD3A3tOSClcEMoC1tE4Sie6mHDTSdqeCexdT_aem_YcSR9ZlKoKIPIyumQfblvQ",
+            ),
             child: const Text(
               "Register Now",
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -542,7 +600,7 @@ class _LandingPageState extends State<LandingPage> {
             ),
           ).animate().fadeIn(),
           const SizedBox(height: 30),
-           ConstrainedBox(
+          ConstrainedBox(
             constraints: BoxConstraints(maxWidth: 800),
             child: Text(
               "Photographs and videos may be taken during the event and could be used on our social media pages or promotional materials.\nIf you do not feel comfortable having your image or your child’s image taken, please let one of our staff members know.",
@@ -575,8 +633,16 @@ class _LandingPageState extends State<LandingPage> {
             runSpacing: 40,
             alignment: WrapAlignment.center,
             children: [
-              _sponsorLogo("Flaring Lair", "https://FlaringLair.com", "flaring_lair_logo.webp"),
-              _sponsorLogo("JLStudios", "", "jlstudios_logo.webp"),
+              _sponsorLogo(
+                "Flaring Lair",
+                "https://FlaringLair.com",
+                "flaring_lair_logo.webp",
+              ),
+              _sponsorLogo(
+                "JLStudios",
+                "https://www.instagram.com/jlstudios416/",
+                "jlstudios_logo.webp",
+              ),
             ],
           ),
         ],
@@ -610,8 +676,12 @@ class _LandingPageState extends State<LandingPage> {
                   "Yes, children must be supervised by a parent or guardian at all times.",
                 ),
                 _faqItem(
+                  "What should we bring to the event?",
+                  "Just your excitement! While we provide plenty of free Pokémon cards, we will not be handing out items to storage them in storage items. We highly recommend bringing your own binder, tin, or a bag to safely store your new collection.",
+                ),
+                _faqItem(
                   "What happens if we arrive late?",
-                  "Free gifts and Pokémon cards are available on a first-come, first-served basis...",
+                  "Free gifts and Pokémon cards are available on a first-come, first-served basis while supplies last.",
                   isLast: true,
                 ),
               ],
@@ -641,7 +711,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 const TextSpan(
                   text:
-                  ".\nDuring the event, please reach out to Daniel or Frances.",
+                      ".\nDuring the event, please reach out to Daniel or Frances.",
                 ),
               ],
             ),
@@ -686,7 +756,7 @@ class _LandingPageState extends State<LandingPage> {
           ),
           const SizedBox(height: 10),
           const Text(
-            "All Pokémon-related trademarks and characters are the property of their respective owners...",
+            "All Pokémon-related trademarks and characters are the property of their respective owners. This is a fan-organized community event and is not affiliated with or endorsed by The Pokémon Company.",
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 12,
@@ -708,12 +778,12 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget _infoCard(
-      String title,
-      String content,
-      IconData icon, {
-        String? link,
-        String? actionText,
-      }) {
+    String title,
+    String content,
+    IconData icon, {
+    String? link,
+    String? actionText,
+  }) {
     return InkWell(
       onTap: link != null ? () => _launchURL(link) : null,
       borderRadius: BorderRadius.circular(24),
@@ -837,11 +907,8 @@ class _LandingPageState extends State<LandingPage> {
               );
             },
             // Optional: Falls back to a simple icon if the image fails to load
-            errorBuilder: (context, error, stackTrace) => const Icon(
-              Icons.business,
-              size: 50,
-              color: Colors.white24,
-            ),
+            errorBuilder: (context, error, stackTrace) =>
+                const Icon(Icons.business, size: 50, color: Colors.white24),
           ),
           const SizedBox(height: 15),
           Text(
@@ -966,7 +1033,7 @@ class _CardSlideshowState extends State<CardSlideshow> {
     if (_pageController.hasClients) {
       int prevPage =
           (_pageController.page!.toInt() - 1 + cardImages.length) %
-              cardImages.length;
+          cardImages.length;
 
       _pageController.animateToPage(
         prevPage,
@@ -988,9 +1055,14 @@ class _CardSlideshowState extends State<CardSlideshow> {
           itemBuilder: (context, index) {
             return Image.network(
               cardImages[index],
-              fit: BoxFit.cover, // Ensures images cover the entire container elegantly
+              fit: BoxFit.cover,
+              // Ensures images cover the entire container elegantly
               errorBuilder: (context, error, stackTrace) => const Center(
-                child: Icon(Icons.broken_image, color: Colors.white24, size: 50),
+                child: Icon(
+                  Icons.broken_image,
+                  color: Colors.white24,
+                  size: 50,
+                ),
               ),
             );
           },
