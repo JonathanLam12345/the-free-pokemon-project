@@ -299,11 +299,32 @@ class _LandingPageState extends State<LandingPage> {
             },
             // Falls back to a simple icon if the image fails to load
             errorBuilder: (context, error, stackTrace) => const Icon(
-              Icons.broken_image, // Fixed invalid 'Icons.logo' icon
+              Icons.broken_image,
               size: 50,
               color: Colors.white24,
             ),
-          ).animate().fadeIn(delay: 800.ms).slideY(begin: 0.1),
+          )
+          // 1st Animation: The original entrance (Fade in and slide up)
+              .animate()
+              .fadeIn(delay: 800.ms)
+              .slideY(begin: 0.1)
+
+          // 2nd Animation: The cute idle "tilt" wobble
+              .animate(
+            onPlay: (controller) => controller.repeat(), // Loops this specific animation forever
+          )
+          // Waits 5 seconds before shaking to create a pause
+              .shake(
+            delay: 5.seconds,
+            duration: 800.ms,
+            hz: 2, // How many times it tilts back and forth
+            rotation: 0.15, // The angle of the tilt (left and right)
+            offset: const Offset(0, 0), // Keeps it in place (only rotates, no shifting)
+            curve: Curves.easeInOut,
+          )
+          // Adds another 2 seconds of stillness before the loop repeats,
+          // giving it a semi-random, organic feel!
+              .then(delay: 2.seconds),
 
           // // The Parent Container provides the solid background to hide the stars
           // Container(
@@ -397,8 +418,8 @@ class _LandingPageState extends State<LandingPage> {
               ),
               //  SizedBox(height: 50, width: 50,),
               Container(
-                width: 460,
-                height: 320,
+                width: 520,
+                height: 400,
                 clipBehavior: Clip.antiAlias,
                 // Ensures the slideshow images respect the rounded corners
                 decoration: BoxDecoration(
@@ -642,6 +663,8 @@ class _LandingPageState extends State<LandingPage> {
                 "JLStudios",
                 "https://www.instagram.com/jlstudios416/",
                 "jlstudios_logo.webp",
+                // NEW: Add the promo text here
+                promoText: "Get \$10 off your first order by stating the promo code, TheFreePokemonProject",
               ),
             ],
           ),
@@ -677,7 +700,7 @@ class _LandingPageState extends State<LandingPage> {
                 ),
                 _faqItem(
                   "What should we bring to the event?",
-                  "Just your excitement! While we provide plenty of free Pokémon cards, we will not be handing out items to storage them in storage items. We highly recommend bringing your own binder, tin, or a bag to safely store your new collection.",
+                  "Just your excitement! While we provide plenty of free Pokémon cards, we will not be handing out items to store them it. We highly recommend bringing your own binder, tin, or a bag to safely store your new collection.",
                 ),
                 _faqItem(
                   "What happens if we arrive late?",
@@ -888,7 +911,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget _sponsorLogo(String name, String url, String imageName) {
+  Widget _sponsorLogo(String name, String url, String imageName, {String? promoText}) {
     return InkWell(
       onTap: url.isNotEmpty ? () => _launchURL(url) : null,
       child: Column(
@@ -896,7 +919,7 @@ class _LandingPageState extends State<LandingPage> {
           // Replaced the Icon with a network image from your GitHub assets
           Image.network(
             '$githubBase$imageName',
-            height: 80,
+            height: 150,
             fit: BoxFit.contain,
             loadingBuilder: (context, child, loadingProgress) {
               if (loadingProgress == null) return child;
@@ -908,21 +931,38 @@ class _LandingPageState extends State<LandingPage> {
             },
             // Optional: Falls back to a simple icon if the image fails to load
             errorBuilder: (context, error, stackTrace) =>
-                const Icon(Icons.business, size: 50, color: Colors.white24),
+            const Icon(Icons.business, size: 50, color: Colors.white24),
           ),
-          const SizedBox(height: 15),
+          const SizedBox(height: 10),
           Text(
             name,
             style: const TextStyle(
+                fontSize: 17,
               color: Color(0xFFFFCB05),
               fontWeight: FontWeight.bold,
             ),
           ),
+          // NEW: Conditionally show the promo text if it is provided
+          if (promoText != null) ...[
+            const SizedBox(height: 10),
+            SizedBox(
+              width: 200, // Keeps the text wrapped nicely under the logo
+              child: Text(
+                promoText,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white70,
+                  fontSize: 11,
+                  fontStyle: FontStyle.italic,
+                  height: 1.4,
+                ),
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
-
   Future<void> _launchURL(String url) async {
     if (!await launchUrl(Uri.parse(url))) throw 'Could not launch $url';
   }
