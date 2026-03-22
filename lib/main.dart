@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -124,7 +125,7 @@ class _LandingPageState extends State<LandingPage> {
                     _buildGallerySection(_galleryKey),
                     _buildSponsorsSection(),
                     _buildFAQSection(_faqKey),
-                    _buildTeamSection(),
+                    // _buildTeamSection(),
                     _buildFooter(),
                   ],
                 ),
@@ -213,8 +214,16 @@ class _LandingPageState extends State<LandingPage> {
   }
 
   Widget _navButton(String text, GlobalKey key) {
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return TextButton(
-      onPressed: () => _scrollTo(key),
+      onPressed: () {
+        analytics.logEvent(
+          name: 'free-pokemon-button_press',
+          parameters: {'Navigate to Key': 'navigate_to_$key'},
+        );
+
+        _scrollTo(key);
+      },
       child: Text(
         text,
         style: const TextStyle(color: Colors.white, fontSize: 13),
@@ -277,7 +286,8 @@ class _LandingPageState extends State<LandingPage> {
                   ),
                   onPressed: () => _scrollTo(_registrationKey),
                   child: const Text(
-                    "REGISTER NOW",
+                    //"REGISTER NOW",
+                    "Registration Available Soon. Stay Tuned!!!",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                 ).animate().shake(delay: 1200.ms),
@@ -286,44 +296,47 @@ class _LandingPageState extends State<LandingPage> {
           ),
 
           Image.network(
-            '${githubBase}logo.webp',
-            height: 160,
-            fit: BoxFit.contain,
-            loadingBuilder: (context, child, loadingProgress) {
-              if (loadingProgress == null) return child;
-              return const SizedBox(
-                height: 50,
-                width: 50,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              );
-            },
-            // Falls back to a simple icon if the image fails to load
-            errorBuilder: (context, error, stackTrace) => const Icon(
-              Icons.broken_image,
-              size: 50,
-              color: Colors.white24,
-            ),
-          )
-          // 1st Animation: The original entrance (Fade in and slide up)
+                '${githubBase}logo.webp',
+                height: 160,
+                fit: BoxFit.contain,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return const SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  );
+                },
+                // Falls back to a simple icon if the image fails to load
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.broken_image,
+                  size: 50,
+                  color: Colors.white24,
+                ),
+              )
+              // 1st Animation: The original entrance (Fade in and slide up)
               .animate()
               .fadeIn(delay: 800.ms)
               .slideY(begin: 0.1)
-
-          // 2nd Animation: The cute idle "tilt" wobble
+              // 2nd Animation: The cute idle "tilt" wobble
               .animate(
-            onPlay: (controller) => controller.repeat(), // Loops this specific animation forever
-          )
-          // Waits 5 seconds before shaking to create a pause
+                onPlay: (controller) => controller
+                    .repeat(), // Loops this specific animation forever
+              )
+              // Waits 5 seconds before shaking to create a pause
               .shake(
-            delay: 5.seconds,
-            duration: 800.ms,
-            hz: 2, // How many times it tilts back and forth
-            rotation: 0.15, // The angle of the tilt (left and right)
-            offset: const Offset(0, 0), // Keeps it in place (only rotates, no shifting)
-            curve: Curves.easeInOut,
-          )
-          // Adds another 2 seconds of stillness before the loop repeats,
-          // giving it a semi-random, organic feel!
+                delay: 5.seconds,
+                duration: 800.ms,
+                hz: 2,
+                // How many times it tilts back and forth
+                rotation: 0.15,
+                // The angle of the tilt (left and right)
+                offset: const Offset(0, 0),
+                // Keeps it in place (only rotates, no shifting)
+                curve: Curves.easeInOut,
+              )
+              // Adds another 2 seconds of stillness before the loop repeats,
+              // giving it a semi-random, organic feel!
               .then(delay: 2.seconds),
 
           // // The Parent Container provides the solid background to hide the stars
@@ -487,7 +500,7 @@ class _LandingPageState extends State<LandingPage> {
                 children: [
                   _featurePoint("Admission"),
                   _featurePoint("Games and activities"),
-                  _featurePoint("Raffles and prizes"),
+                  _featurePoint("Raffles and prizes",url: "https://www.facebook.com/share/p/16xtsYJt77/"),
                   _featurePoint("Pokémon cards, \nincluding Holo cards!"),
 
                   SizedBox(height: 15),
@@ -556,11 +569,13 @@ class _LandingPageState extends State<LandingPage> {
                 borderRadius: BorderRadius.circular(30),
               ),
             ),
-            onPressed: () => _launchURL(
-              "https://docs.google.com/forms/d/e/1FAIpQLSe62I_R8h1crE2auiA62R3PVzFc1RJ8iPWVdvTcMsRxd7jphg/viewform?fbclid=IwY2xjawQW4WJleHRuA2FlbQIxMABicmlkETFid2RCU2tyMzFNZjVnRkptc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoMheblqS3bhmokeuwOR5wqfWD3A3tOSClcEMoC1tE4Sie6mHDTSdqeCexdT_aem_YcSR9ZlKoKIPIyumQfblvQ",
-            ),
+            // onPressed: () => _launchURL(
+            //   "https://docs.google.com/forms/d/e/1FAIpQLSe62I_R8h1crE2auiA62R3PVzFc1RJ8iPWVdvTcMsRxd7jphg/viewform?fbclid=IwY2xjawQW4WJleHRuA2FlbQIxMABicmlkETFid2RCU2tyMzFNZjVnRkptc3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHoMheblqS3bhmokeuwOR5wqfWD3A3tOSClcEMoC1tE4Sie6mHDTSdqeCexdT_aem_YcSR9ZlKoKIPIyumQfblvQ",
+            // )
+            onPressed: () => null,
             child: const Text(
-              "Register Now",
+              //"Register Now",
+              "Registration Available Soon. Stay Tuned!!!",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
           ),
@@ -664,7 +679,8 @@ class _LandingPageState extends State<LandingPage> {
                 "https://www.instagram.com/jlstudios416/",
                 "jlstudios_logo.webp",
                 // NEW: Add the promo text here
-                promoText: "Get \$10 off your first order by stating the promo code, TheFreePokemonProject",
+                promoText:
+                    "Get \$10 off your first order by stating the promo code, TheFreePokemonProject",
               ),
             ],
           ),
@@ -710,7 +726,7 @@ class _LandingPageState extends State<LandingPage> {
               ],
             ),
           ),
-          const SizedBox(height: 50),
+          const SizedBox(height: 30),
           SelectableText.rich(
             TextSpan(
               style: const TextStyle(
@@ -745,28 +761,29 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget _buildTeamSection() {
-    return Container(
-      color: const Color(0xFF081229),
-      padding: const EdgeInsets.all(80),
-      child: const Column(
-        children: [
-          SectionHeader(title: "The Team", subtitle: "Organizers"),
-          SizedBox(height: 30),
-          Text(
-            "To be Posted...",
-            style: TextStyle(
-              fontSize: 22,
-              color: Color(0xFFFFCB05),
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildTeamSection() {
+  //   return Container(
+  //     color: const Color(0xFF081229),
+  //     padding: const EdgeInsets.all(80),
+  //     child: const Column(
+  //       children: [
+  //         SectionHeader(title: "The Team", subtitle: "Organizers"),
+  //         SizedBox(height: 30),
+  //         Text(
+  //           "To be Posted...",
+  //           style: TextStyle(
+  //             fontSize: 22,
+  //             color: Color(0xFFFFCB05),
+  //             fontWeight: FontWeight.bold,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildFooter() {
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return Container(
       padding: const EdgeInsets.all(60),
       child: Column(
@@ -789,7 +806,14 @@ class _LandingPageState extends State<LandingPage> {
           ),
           const SizedBox(height: 10),
           TextButton(
-            onPressed: () => _launchURL("mailto:JLStudios416@gmail.com"),
+            onPressed: () {
+              analytics.logEvent(
+                name: 'free-pokemon-website_visit',
+                parameters: {'about_JLStudios': 'about_JLStudios'},
+              );
+
+              _launchURL("mailto:JLStudios416@gmail.com");
+            },
             child: const Text(
               "Website designed by JLStudios",
               style: TextStyle(color: Color(0xFFFFCB05)),
@@ -807,8 +831,18 @@ class _LandingPageState extends State<LandingPage> {
     String? link,
     String? actionText,
   }) {
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return InkWell(
-      onTap: link != null ? () => _launchURL(link) : null,
+      onTap: link != null
+          ? () {
+              _launchURL(link);
+
+              analytics.logEvent(
+                name: 'free-pokemon-info_card_clicked',
+                parameters: {'info_card_clicked': link},
+              );
+            }
+          : null,
       borderRadius: BorderRadius.circular(24),
       child: Container(
         width: 260,
@@ -868,20 +902,42 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget _featurePoint(String text) {
+  Widget _featurePoint(String text, {String? url}) {
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.star, color: Color(0xFFFFCB05), size: 18),
-          const SizedBox(width: 15),
-          Text(text, style: const TextStyle(fontSize: 18)),
-        ],
+      child: InkWell(
+        // If url is null, the button is not clickable
+        onTap: url != null
+            ? () {
+          _launchURL(url);
+          analytics.logEvent(
+            name: 'free-pokemon-feature_click',
+            parameters: {'feature_text': text, 'url': url},
+          );
+        }
+            : null,
+        mouseCursor: url != null ? SystemMouseCursors.click : SystemMouseCursors.basic,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.star, color: Color(0xFFFFCB05), size: 18),
+            const SizedBox(width: 15),
+            Text(
+              text,
+              style: TextStyle(
+                fontSize: 18,
+                // Optional: Underline the text if it is a link to signify it is clickable
+                decoration: url != null ? TextDecoration.underline : TextDecoration.none,
+                color: url != null ? const Color(0xFFFFCB05) : Colors.white,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
-
   Widget _faqItem(String question, String answer, {bool isLast = false}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
@@ -911,9 +967,24 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget _sponsorLogo(String name, String url, String imageName, {String? promoText}) {
+  Widget _sponsorLogo(
+    String name,
+    String url,
+    String imageName, {
+    String? promoText,
+  }) {
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return InkWell(
-      onTap: url.isNotEmpty ? () => _launchURL(url) : null,
+      onTap: url.isNotEmpty
+          ? () {
+              _launchURL(url);
+
+              analytics.logEvent(
+                name: 'free-pokemon-sponsor_link_clicked',
+                parameters: {'sponsor_link_clicked': url},
+              );
+            }
+          : null,
       child: Column(
         children: [
           // Replaced the Icon with a network image from your GitHub assets
@@ -931,13 +1002,13 @@ class _LandingPageState extends State<LandingPage> {
             },
             // Optional: Falls back to a simple icon if the image fails to load
             errorBuilder: (context, error, stackTrace) =>
-            const Icon(Icons.business, size: 50, color: Colors.white24),
+                const Icon(Icons.business, size: 50, color: Colors.white24),
           ),
           const SizedBox(height: 10),
           Text(
             name,
             style: const TextStyle(
-                fontSize: 17,
+              fontSize: 17,
               color: Color(0xFFFFCB05),
               fontWeight: FontWeight.bold,
             ),
@@ -963,6 +1034,7 @@ class _LandingPageState extends State<LandingPage> {
       ),
     );
   }
+
   Future<void> _launchURL(String url) async {
     if (!await launchUrl(Uri.parse(url))) throw 'Could not launch $url';
   }
@@ -1033,6 +1105,13 @@ class _CardSlideshowState extends State<CardSlideshow> {
   @override
   void initState() {
     super.initState();
+    html.window.localStorage['cookie_consent'] = 'true';
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
+    analytics.logEvent(
+      name: 'free-pokemon-website_visit',
+      parameters: {'main_website_visit': 'main_website_visit'},
+    );
+
     _startTimer();
   }
 
@@ -1086,6 +1165,7 @@ class _CardSlideshowState extends State<CardSlideshow> {
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -1112,7 +1192,14 @@ class _CardSlideshowState extends State<CardSlideshow> {
           left: 10,
           child: IconButton(
             icon: const Icon(Icons.arrow_back_ios, color: Colors.white70),
-            onPressed: _movePrevious,
+            onPressed: () {
+              analytics.logEvent(
+                name: 'free-pokemon-image_slideShow',
+                parameters: {'image_slideShow_move_previous': 'move_previous'},
+              );
+
+              _movePrevious;
+            },
           ),
         ),
         // Next Button Overlay
@@ -1120,7 +1207,13 @@ class _CardSlideshowState extends State<CardSlideshow> {
           right: 10,
           child: IconButton(
             icon: const Icon(Icons.arrow_forward_ios, color: Colors.white70),
-            onPressed: _moveNext,
+            onPressed: () {
+              analytics.logEvent(
+                name: 'free-pokemon-image_slideShow',
+                parameters: {'image_slideShow_move_next': 'move_next'},
+              );
+              _moveNext;
+            },
           ),
         ),
       ],
